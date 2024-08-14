@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+
+<launch>
+
+  <!-- SPADE services-->
+    <node pkg="tb_waiter" type="runspade.bash" name="runspade" output="screen"/>
+
+</launch>
+
+      

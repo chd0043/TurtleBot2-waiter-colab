@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+
+<launch>
+  
+  <arg name="initial_pose_x" default="0.0"/> 
+  <arg name="initial_pose_y" default="0.0"/> 
+  <arg name="initial_pose_a" default="0.0"/>
+	
+  <!-- turtlebot bringup -->
+  <include file="$(find turtlebot_bringup)/launch/minimal.launch">
+  </include>
+  
+  <!-- kinect bringup -->
+  <include file="$(find turtlebot_bringup)/launch/3dsensor.launch">
+    <arg name="rgb_processing" value="false" />
+    <arg name="depth_registration" value="false" />
+    <arg name="depth_processing" value="false" />
+    <arg name="scan_topic" value="/scan" />
+  </include>
+  
+  <!-- Enable Auto-dock --> 
+  <include file="$(find tb_waiter)/launch/includes/docking.launch">
+  </include>
+  
+  <!-- Tb_waiter services -->
+  <node pkg="tb_waiter" type="turtlebot_services" respawn="false" name="turtlebotService" output="screen"/>
+  <node pkg="tb_waiter" type="turtlebotActions" respawn="false" name="turtlebotActions" output="screen">
+     <remap from="cmd_vel" to="mobile_base/commands/velocity"/>
+  </node>   
+  <node pkg="tb_waiter" type="markRecognition" respawn="false" name="markRecognition" output="screen"/>
+  
+    
+  <!-- Map server -->
+  <arg name="map_file" default="$(find tb_waiter)/maps/lab2.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" /> 
+  
+  <include file="$(find tb_waiter)/launch/includes/amcl.launch.xml">
+    <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
+    <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
+  </include>
+
+  <include file="$(find tb_waiter)/launch/includes/move_base_amcl.launch.xml"/>
+
+</launch>
+

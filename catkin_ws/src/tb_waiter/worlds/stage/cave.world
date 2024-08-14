@@ -1,0 +1,98 @@
+
+
+define hokuyo ranger
+(
+  sensor(
+        range_min 0.0
+        range_max 1.5
+        fov 180.25
+        samples 10.81
+    )
+    color "black"
+    size [ 0.05 0.05 0.1 ]
+)
+
+define charging_bump model
+(
+  pose [0.240 0.000 -0.100 0.000 ] 
+  size [0.120 0.050 0.100] 
+  take_watts 2000.0 
+  color "orange" 
+  obstacle_return 0
+)
+
+define topurg ranger
+(
+    sensor( 			
+    range [ 0.0  1.5 ]
+    fov 120.25
+   samples 1081
+  )
+
+  # generic model properties
+  color "black"
+  size [ 0.050 0.050 0.100 ]
+)
+
+define roomba position
+(
+  size [0.180 0.180 0.250]
+   
+  origin [0.000 0.000 0.000 0.000]
+  gui_nose 1
+  drive "diff"
+  topurg(pose [ 0.050 0.000 0.000 0.000 ])
+  
+  #hokuyo( pose [0 0 0.1 0] )
+  #charging_bump( fiducial( range_max 5 pose [ 0.000 0.000 -0.100 0.000 ] ) )
+
+  # Report error-free position in world coordinates
+  localization "gps"
+  localization_origin [ 0 0 0 0 ]
+  
+)
+
+define floorplan model
+(
+  	# Sombre, sensible, artistic
+  	color "gray30"
+
+	# Most maps will need a bounding box
+	boundary 1
+
+	gui_nose 0
+	gui_grid 0
+	gui_move 0
+	gui_outline 0
+	gripper_return 0
+	fiducial_return 0
+	laser_return 1
+)
+
+# Set the resolution of the underlying raytrace model in meters
+resolution 0.02
+
+interval_sim 100  # simulation timestep in milliseconds
+
+# Configure the GUI window
+window
+(
+  	size [ 521 600 ] 		# in pixels
+  	scale 35.431  						# pixels per meter
+  	center [ -1.918  0.903 ]
+  	rotate [ 0.000  0.000 ]
+  			
+  	show_data 1              	# 1=on 0=off
+)
+
+floorplan
+( 
+  name "cave"
+  bitmap "cave.pgm"
+  size [13.5 13.5 1.5] #size [27.0 27.0 1.5]
+  pose [0 0 0 0]
+)
+
+roomba( pose [ 1.756 4.945 0.000 180.000 ] name "robot_0" color "blue")
+roomba( pose [ 2.222 -1.456 0.000 180.000 ] name "robot_1" color "red")
+

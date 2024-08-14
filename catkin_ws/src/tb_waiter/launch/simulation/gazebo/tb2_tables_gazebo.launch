@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+
+<launch>
+
+  <arg name="r1_x" default="1" />
+  <arg name="r1_y" default="1" />
+  <arg name="r2_x" default="-1" />
+  <arg name="r2_y" default="1" />
+  <arg name="r3_x" default="1" />
+  <arg name="r3_y" default="-1" />
+      
+  <!-- start world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+  <!--         -->
+    <arg name="use_sim_time" value="true"/>
+    <arg name="debug" value="true"/>
+    <arg name="gui" value="true"/>       <!-- graphic interface -->
+    <arg name="headless" value="false"/>
+    <arg name="world_name" value="$(find tb_waiter)/worlds/tres_mesas.world"/>
+  </include>
+ 
+   <!-- include robot description -->
+   <param name="robot_description"
+    command="$(find xacro)/xacro.py '$(find turtlebot_description)/robots/kobuki_hexagons_kinect.urdf.xacro'" />
+    
+  <!-- BEGIN ROBOT 0-->
+  <group ns="robot0">
+    <param name="tf_prefix" value="robot0_tf" />
+    <include file="$(find tb_waiter)/launch/simulation/gazebo/includes/turtlebot1.launch" >
+      <arg name="init_pose" value="-x $(arg r2_x) -y $(arg r2_y) -z 0" />
+      <arg name="robot_name"  value="robot0" />
+    </include>
+  </group>    
+    
+  <!-- BEGIN ROBOT 1-->
+  <group ns="robot1">
+    <param name="tf_prefix" value="robot1_tf" />
+    <include file="$(find tb_waiter)/launch/simulation/gazebo/includes/turtlebot1.launch" >
+      <arg name="init_pose" value="-x $(arg r1_x) -y $(arg r1_y) -z 0" />
+      <arg name="robot_name"  value="robot1" />
+    </include>
+  </group>
+    
+  <!-- Start move_base for 2 robots 
+  <include file="$(find tb_waiter)/launch/simulation/includes/move_base_2.launch" />
+  -->
+
+  </launch>

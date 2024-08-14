@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<launch>
+
+  <arg name="map_file" default="$(find tb_waiter)/maps/blank_map.yaml"/>
+  <arg name="rviz_robot" default="robot1"/>
+  
+   
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" /> 
+  
+  <!-- BEGIN ROBOT 0-->
+  <group ns="robot0">
+    <param name="tf_prefix" value="robot0_tf" />
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" /> 
+    <node pkg="tb_waiter" name="fake_localization" type="fake_amcl" output="screen">
+    	<remap from="base_pose_ground_truth" to="odom"/>
+    </node>
+    <include file="$(find tb_waiter)/launch/simulation/includes/move_base_sim.launch.xml" />
+  </group>
+    
+  <!-- BEGIN ROBOT 1-->
+  <group ns="robot1">
+    <param name="tf_prefix" value="robot1_tf" />
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" /> 
+    <node pkg="tb_waiter" name="fake_localization" type="fake_amcl" output="screen">
+    	<remap from="base_pose_ground_truth" to="odom"/>
+    </node>
+    <include file="$(find tb_waiter)/launch/simulation/includes/move_base_sim.launch.xml" />
+  </group> 
+</launch>
+
+      

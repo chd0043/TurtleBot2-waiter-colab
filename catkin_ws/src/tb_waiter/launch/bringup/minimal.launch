@@ -1,0 +1,23 @@
+<launch>
+  
+  <arg name="robot_name" default=""/>
+  <arg name="battery"    default="$(optenv TURTLEBOT_BATTERY /sys/class/power_supply/BAT0)"/>  <!-- /proc/acpi/battery/BAT0 in 2.6 or earlier kernels-->
+  <arg name="stacks"     default="$(optenv TURTLEBOT_STACKS hexagons)"/>  <!-- circles, hexagons -->
+  <arg name="3d_sensor"  default="$(optenv TURTLEBOT_3D_SENSOR kinect)"/>  <!-- kinect, asus_xtion_pro -->
+  <arg name="simulation" default="$(optenv TURTLEBOT_SIMULATION false)"/>
+
+  <param name="use_sim_time" value="false"/> <!-- $(arg simulation) -->
+  <param name="/use_sim_time" value="false"/>
+  
+  <include file="$(find tb_waiter)/launch/bringup/includes/robot.launch.xml"/>
+
+  <include file="$(find tb_waiter)/launch/bringup/includes/kobuki/mobile_base.launch.xml">
+  	<arg name="robot_id" value="$(arg robot_name)" />
+  </include>
+  
+  <node pkg="linux_hardware" type="laptop_battery.py" name="turtlebot_laptop_battery">
+        <param name="acpi_path" type="string" value="$(arg battery)" />
+  </node>
+  
+</launch>
+

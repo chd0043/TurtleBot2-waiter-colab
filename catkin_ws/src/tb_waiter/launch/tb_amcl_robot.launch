@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+
+<launch>
+   
+   <arg name="robot_id" default="robot_1"/>
+
+   <!-- Map server -->
+   <arg name="map_file" default="$(find tb_waiter)/maps/lab3.yaml"/>
+   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" /> 
+  
+   <!-- BEGIN ROBOT "robot_id" --> 
+  <group ns="$(arg robot_id)">
+    <param name="tf_prefix" value="$(arg robot_id)" />
+   
+    <!-- turtlebot bringup -->
+    <include file="$(find tb_waiter)/launch/bringup/minimal.launch">
+    	<arg name="robot_name" value="$(arg robot_id)" />
+    </include> 
+	  
+    <!-- kinect bringup -->
+    <include file="$(find turtlebot_bringup)/launch/3dsensor.launch">
+	    <arg name="rgb_processing" value="false" />
+	    <arg name="depth_registration" value="false" />
+	    <arg name="depth_processing" value="false" />
+	    <arg name="scan_topic" value="/$(arg robot_id)/scan" />
+    </include>
+    
+    <!-- change scan frame_id -->  
+    <node name="reconf_laser_frame" pkg="dynamic_reconfigure" type="dynparam" args="set_from_parameters depthimage_to_laserscan">
+      <param name="output_frame_id" value="/$(arg robot_id)/camera_depth_frame" />
+    </node>
+  
+    <!-- Tb_waiter services -->
+    <node pkg="tb_waiter" type="turtlebot_services" respawn="false" name="turtlebot_service" output="screen"/>
+    <node pkg="tb_waiter" type="markRecognition" respawn="false" name="markRecognition"/>    
+    <node pkg="tb_waiter" type="turtlebotActions" respawn="false" name="turtlebotActions" output="screen">
+      <remap from="cmd_vel" to="mobile_base/commands/velocity"/>
+    </node>      
+    
+    
+    <!-- Enable Auto-dock --> 
+    <include file="$(find tb_waiter)/launch/includes/docking.launch"/>
+    
+    <!--- Run AMCL -->
+    <include file="$(find tb_waiter)/launch/includes/amcl_diff.launch.xml" >
+    	<arg name="robot_name" value="$(arg robot_id)"/>
+    	<arg name="scan_topic" value="/$(arg robot_id)/scan"/>
+    	<arg name="initial_pose_x" value="1.418"/>
+    	<arg name="initial_pose_y" value="1.868"/>
+    	<arg name="initial_pose_a" value="3.14"/>
+    </include>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+    
+    <include file="$(find tb_waiter)/launch/includes/move_base.launch.xml" />
+  </group>
+    
+</launch>
+
+
+
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<launch>
+
+	<arg name="robot_name"/>
+	<arg name="init_pose"/>
+
+	<!-- odom publisher -->
+     	<param name="robot_name" value=  "$(arg robot_name)" />
+     	<node pkg="tb_waiter" type="odom_gazebo" name="odom_gazebo"/>
+     
+     <node pkg="tb_waiter" type="turtlebot_services" respawn="false" name="turtlebot_service" output="screen"/>
+     <node pkg="tb_waiter" type="turtlebotActions" respawn="false" name="turtlebotActions" output="screen"/>
+	  
+	  <!-- Gazebo model spawner -->
+	<node name="spawn_turtlebot_model" pkg="gazebo_ros" type="spawn_model"
+	    args="$(arg init_pose) -unpause -urdf -param /robot_description -model $(arg robot_name) -robotNamespace $(arg robot_name) -namespace $(arg robot_name)"/>
+	  	 
+	<!-- robot state publisher (at 1 Hz) --> 
+	<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+	 <param name="publish_frequency" type="double" value="1.0" />
+	</node>
+
+	<!-- Publish tf info -->
+	<node pkg="tb_waiter" name="tb_tf_broadcaster" type="tb_tf_broadcaster">
+	</node> 
+	  	
+</launch>
+
+

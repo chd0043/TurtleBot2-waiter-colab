@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<!-- 
+    ROS navigation stack with velocity smoother and safety (reactive) controller
+-->
+
+<launch>
+<!--
+  <include file="$(find tb_waiter)/launch/includes/velocity_smoother.launch.xml"/>
+  <include file="$(find tb_waiter)/launch/includes/safety_controller.launch.xml"/>
+-->
+
+  <arg name="odom_topic" default="odom" />
+  <arg name="robot_name" default=""/>
+  
+  <node pkg="tb_waiter" type="turtlebot_services" respawn="false" name="turtlebot_service" output="screen"/>
+  <node pkg="tb_waiter" type="turtlebotActions" respawn="false" name="turtlebotActions" output="screen"/>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find tb_waiter)/param/move_base/move_base_stage/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find tb_waiter)/param/move_base/move_base_stage/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find tb_waiter)/param/move_base/move_base_stage/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find tb_waiter)/param/move_base/move_base_stage/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find tb_waiter)/param/move_base/move_base_stage/base_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find tb_waiter)/param/move_base/move_base_stage/move_base_params.yaml" command="load" />
+
+    <remap from="odom" to="$(arg odom_topic)"/>
+  </node>
+  
+</launch>

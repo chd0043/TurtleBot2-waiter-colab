@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+
+<launch>
+
+  <arg name="map_file" default="$(find tb_waiter)/maps/blank_map.yaml"/>
+  <arg name="rviz_robot" default="robot1"/>
+  
+   
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" > 
+  </node>
+ 
+  <!-- BEGIN ROBOT 1-->
+  <group ns="robot1">
+    <param name="tf_prefix" value="robot1_tf" />
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" /> 
+    <node pkg="tb_waiter" name="fake_localization" type="fake_amcl" output="screen"/>
+    <include file="$(find tb_waiter)/launch/simulation/gazebo/includes/move_base_sim.launch.xml" />
+  </group>
+
+  <!-- BEGIN ROBOT 2-->
+  <group ns="robot0">
+    <param name="tf_prefix" value="robot0_tf" />
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" /> 
+    <node pkg="tb_waiter" name="fake_localization" type="fake_amcl" output="screen"/>
+    <include file="$(find tb_waiter)/launch/simulation/gazebo/includes/move_base_sim.launch.xml" />
+  </group>
+
+  
+    <!-- BEGIN ROBOT 3 -->
+  <group ns="robot3">
+    <param name="tf_prefix" value="robot3_tf" />
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" /> 
+    <node pkg="tb_waiter" name="fake_localization" type="fake_amcl" output="screen"/>
+    <include file="$(find tb_waiter)/launch/simulation/gazebo/includes/move_base_sim.launch.xml" />
+  </group>
+  
+    <!-- open visualization 
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tb_waiter)/rviz/two_robots_origin.rviz">
+  	<remap from="/move_base_simple/goal" to="$(arg rviz_robot)/move_base_simple/goal"/>
+  	<remap from="/initialpose" to="$(arg rviz_robot)/initialpose"/>
+  </node>
+  -->
+    
+    <!--
+    <node name="rviz2" pkg="rviz" type="rviz" args="-d $(find tb_waiter)/rviz/two_robots_origin.rviz">
+  	<remap from="/move_base_simple/goal" to="robot2/move_base_simple/goal"/>
+  	<remap from="/initialpose" to="robot2/initialpose"/>
+  </node>
+  -->
+  
+</launch>
+
+      

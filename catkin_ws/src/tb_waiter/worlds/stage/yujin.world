@@ -1,0 +1,74 @@
+
+define topurg ranger
+(
+    sensor( 			
+    range [ 0.0  1.5 ]
+    fov 160.25
+    samples 1081
+  )
+  # generic model properties
+  color "black"
+  size [ 0.050 0.050 0.100 ]
+)
+
+
+define roomba position
+(
+  size [0.180 0.180 0.250]
+   
+  origin [-0.000 0.000 0.000 0.000]
+  gui_nose 1
+  drive "diff"
+  topurg(pose [ 0.050 0.000 -0.100 0.000 ])
+  
+  # Report error-free position in world coordinates
+  localization "gps"
+  localization_origin [ 0 0 0 0 ]
+  
+)
+
+define floorplan model
+(
+  	# Sombre, sensible, artistic
+  	color "gray30"
+
+	# Most maps will need a bounding box
+	boundary 1
+
+	gui_nose 0
+	gui_grid 0
+	gui_move 0
+	gui_outline 0
+	gripper_return 0
+	fiducial_return 0
+	laser_return 1
+)
+
+# Set the resolution of the underlying raytrace model in meters
+resolution 0.02
+
+interval_sim 100  # simulation timestep in milliseconds
+
+# Configure the GUI window
+window
+(
+  	size [ 521 600 ] 		# in pixels
+  	scale 16.529  						# pixels per meter
+  	center [ 12.377  6.630 ]
+  	rotate [ 0.000  0.000 ]
+  			
+  	show_data 1              	# 1=on 0=off
+)
+
+# load an environment bitmap
+floorplan
+( 
+  	name "yujin"
+  	bitmap "yujin.pgm"
+  	size [100.000 100.000 1.200]
+  	pose [ 0.000 0.000 0.000 0.000 ]
+)
+
+roomba( pose [ 24.925 10.677 0.000 180.000 ] name "robot_0" color "blue")
+roomba( pose [ 5.148 2.843 0.000 180.000 ] name "robot_1" color "red")
+

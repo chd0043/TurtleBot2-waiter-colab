@@ -1,0 +1,78 @@
+define block model
+(
+  size [0.150 0.150 0.150]
+  gui_nose 0
+)
+
+define topurg ranger
+(
+    sensor( 			
+    range [ 0.0  30.0 ]
+    fov 270.25
+   samples 1081
+  )
+
+  # generic model properties
+  color "black"
+  size [ 0.050 0.050 0.100 ]
+)
+
+define roomba position
+(
+  #size [0.415 0.392 0.25]
+  size [0.180 0.180 0.250]
+  #size [0.70 0.70 0.50]
+  origin [-0.000 0.000 0.000 0.000]
+  gui_nose 1
+  drive "diff"
+  topurg(pose [ 0.050 0.000 0.000 0.000 ])
+)
+
+
+define floorplan model
+(
+  # sombre, sensible, artistic
+  color "gray30"
+
+  # most maps will need a bounding box
+  boundary 1
+
+  gui_nose 0
+  gui_grid 0
+
+  gui_outline 0
+  gripper_return 0
+  fiducial_return 0
+  laser_return 1
+)
+
+# set the resolution of the underlying raytrace model in meters
+resolution 0.02
+
+interval_sim 100  # simulation timestep in milliseconds
+
+
+window
+( 
+  size [ 490 696 ] 
+
+  rotate [ 0.000 0.000 ]
+  scale 19.675 
+)
+
+# load an environment bitmap
+floorplan
+( 
+  name "lab"
+  bitmap "lab2.pgm"
+  #size [10.80 11.70 0.5]
+  size [11.500 13.500 0.750]
+  pose [ -1.670 0.719 0.000 0.000 ]
+)
+
+# throw in a robot
+roomba( pose [ -0.670 1.700 0.000 -141.224 ] name "robot_0" color "blue")
+roomba( pose [ -0.685 0.887 0.000 -172.436 ] name "robot_1" color "red")
+block( pose [ -4.689 3.289 0.000 180.000 ] name "table_1" color "green") 
+block( pose [ -5.175 -1.234 0.000 180.000 ] name "table_2" color "green") 
+block( pose [ -4.865 -2.432 0.000 180.000 ] name "table_3" color "green") 

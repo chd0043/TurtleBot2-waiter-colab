@@ -1,0 +1,7 @@
+image: cave.pgm
+resolution: 0.0275 #0.055
+origin: [-6.875, -6.875, 0.0] #[-13.75, -13.75, 0.0]  
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
+

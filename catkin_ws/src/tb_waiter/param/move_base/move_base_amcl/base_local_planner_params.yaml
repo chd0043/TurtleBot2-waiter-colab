@@ -1,0 +1,53 @@
+##### Base parameters #####
+# The base_local_planner is responsible for computing velocity commands to send to the mobile base of the robot given a high-level plan. 
+# Need to set some configuration options based on the specs of our robot to get things up and running.
+# http://wiki.ros.org/navigation/Tutorials/RobotSetup
+# http://wiki.ros.org/dwa_local_planner
+# http://wiki.ros.org/base_local_planner
+
+TrajectoryPlannerROS:
+
+## Robot Configuration Parameters ##
+  max_vel_x: 0.3                # max forward velocity allowed for the base in m/s
+  min_vel_x: 0.1                # min forward velocity allowed for the base in m/s
+
+  max_vel_y: 0.0                # y axis useless in turtlebot 
+  min_vel_y: 0.0                #
+  acc_lim_y: 0.0                #
+  vy_samples: 0                 #
+
+  #max_rotational_vel: 1.5      # The maximum rotational velocity allowed for the base in radians/s
+  max_vel_theta:  1.0
+  min_vel_theta: -1.0
+  min_in_place_vel_theta: 0.6   # The minimum rotational velocity allowed for the base while performing in-place rotations in radians/s
+  
+  acc_lim_x: 0.5                # The x acceleration limit of the robot in m/s^2
+  acc_lim_th: 1.0               # The rotational acceleration limit of the robot in radians/s^2
+
+## Goal Tolerance Parameters ##
+  yaw_goal_tolerance: 0.3       # Tolerance in radians for the controller in yaw/rotation when achieving its goal
+  xy_goal_tolerance: 0.15       # Tolerance in meters for the controller in the x & y distance when achieving a goal
+
+## Forward Simulation Parameters ##
+  sim_time: 3.0                 # The amount of time to forward-simulate trajectories in seconds
+  vx_samples: 6                 # The number of samples to use when exploring the x velocity space
+  vtheta_samples: 20            # The number of samples to use when exploring the theta velocity space
+
+## Trajectory Scoring Parameters ##
+  meter_scoring: true           # If true, distances are expressed in meters; otherwise grid cells
+  pdist_scale: 0.6              # The weighting for how much the controller should stay close to the path it was given (dflt: 0.6) 
+  gdist_scale: 0.8              # The weighting for how much the controller should attempt to reach its local goal, also controls speed (dflt: 0.8)
+  occdist_scale: 0.01           # The weighting for how much the controller should attempt to avoid obstacles
+  heading_lookahead: 0.325      # How far to look ahead in meters when scoring different in-place-rotation trajectories
+  dwa: true                     # Whether to use the Dynamic Window Approach (DWA)_ or whether to use Trajectory Rollout
+
+## Oscillation Prevention Parameters ##
+  oscillation_reset_dist: 0.05  # How far the robot must travel in meters before oscillation flags are reset  
+
+## Differential-drive robot configuration ##
+  holonomic_robot: false        # A Holonomic robot is defined as a system that has the same numbers of actuation and degrees of freedom.
+                                # Determines whether velocity commands are generated for a holonomic or non-holonomic robot. 
+                                # For holonomic robots, strafing velocity commands may be issued to the base. 
+                                # For non-holonomic robots, no strafing velocity commands will be issued.
+
+

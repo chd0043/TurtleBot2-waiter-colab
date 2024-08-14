@@ -1,0 +1,15 @@
+#### Global Configuration (global_costmap) ####
+# Reference: http://wiki.ros.org/navigation/Tutorials/RobotSetup
+# Reference: http://wiki.ros.org/costmap_2d
+
+global_costmap:
+   global_frame: /map                   # Defines what coordinate frame the costmap should run in
+   robot_base_frame: base_footprint     # defines the coordinate frame the costmap should reference for the base of the robot.
+   update_frequency: 1.0                # determines the frequency, in Hz, at which the costmap will run its update loop.
+   publish_frequency: 0.5               # parameter determines the rate, in Hz, at which the costmap will publish visualization information.
+   map_topic: /map
+   static_map: true                     # determines whether or not the costmap should initialize itself based on a map served by the map_server.
+   transform_tolerance: 0.5             # Specifies the delay in transform (tf) data that is tolerable in seconds. 
+                                        # Serves as a safeguard to losing a link in the tf tree while still allowing an amount of latency the user is comfortable with to exist in the system.
+
+# If you aren't using an existing map or map server, set the static_map parameter to false.

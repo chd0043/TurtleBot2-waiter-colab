@@ -1,0 +1,12 @@
+<launch>
+
+  <arg name="rviz_robot" default="robot_1"/>
+
+    <!-- open visualization   -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tb_waiter)/rviz/rviz_stage_lab.rviz">
+  	<remap from="/move_base_simple/goal" to="$(arg rviz_robot)/move_base_simple/goal"/>
+  	<remap from="/initialpose" to="$(arg rviz_robot)/initialpose"/>
+  </node>
+
+
+</launch>
