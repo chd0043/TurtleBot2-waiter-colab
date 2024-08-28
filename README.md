@@ -8,3 +8,5 @@ An agent-based approach to a multi-robot task allocation system for a beverage d
 
 https://www.youtube.com/watch?v=K8CC5_428b0
 
+Note: Developed in ROS Hydra.
+
